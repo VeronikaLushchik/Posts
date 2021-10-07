@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import './App.scss';
 import { PostsList } from './components/PostList';
 import { Layout } from './pages/Layout';
 import { CreatePost } from './pages/CreatePost';
