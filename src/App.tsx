@@ -5,7 +5,6 @@ import { Layout } from './pages/Layout';
 import { CreatePost } from './pages/CreatePost';
 
 export const App: React.FC = () => {
-  // const [postId, setPostId] = useState(0);
 
   return (
     <Router>

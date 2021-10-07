@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
 import { getPosts } from '../../axios/posts';
-// import './PostsList.scss';
 
-// type Props = {
-//   selectedPostId: number;
-//   selectPost: (postId :number) => void;
-// };
 const columns = [
   { field: 'userId', headerName: 'UserID' },
   { field: 'title', headerName: 'Title', width: 300 },
@@ -14,7 +9,6 @@ const columns = [
 ];
 
 export const PostsList: React.FC = () => {
-//   const { selectedPostId, selectPost } = props;
   const [posts, setPosts] = useState([] as Post[]);
 
   useEffect(() => {
