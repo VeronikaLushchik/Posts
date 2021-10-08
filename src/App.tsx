@@ -1,8 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import { PostsList } from './components/PostList';
+import { routes } from './routes';
 import { Layout } from './pages/Layout';
-import { CreatePost } from './pages/CreatePost';
 
 export const App: React.FC = () => {
 
@@ -10,12 +9,11 @@ export const App: React.FC = () => {
     <Router>
       <Layout>
         <Switch>
-          <Route exact path="/">
-            <PostsList />
-          </Route>
-          <Route path="/create">
-            <CreatePost />
-          </Route>
+          {routes.map(item => (
+            <Route exact path={item.path} key={item.path}>
+              {item.page}
+            </Route>
+          ))}
         </Switch>
       </Layout>
     </Router>
