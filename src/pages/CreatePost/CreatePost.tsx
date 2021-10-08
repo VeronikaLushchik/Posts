@@ -1,11 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-
-export const CreatePost: React.FC = () => {
-
-  return (
-    <h2>Here would be a form</h2>
-=======
 import React, { SetStateAction, useState } from 'react';
 import { Formik } from 'formik';
 import { AxiosResponse } from 'axios';
@@ -84,6 +76,5 @@ export const CreatePost: React.FC = () => {
       </Formik>
       <h6>{posts.length}</h6>
     </div>
->>>>>>> fixes, add form
   );
 };

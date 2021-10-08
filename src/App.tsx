@@ -4,7 +4,6 @@ import { routes } from './routes';
 import { Layout } from './pages/Layout';
 
 export const App: React.FC = () => {
-
   return (
     <Router>
       <Layout>
