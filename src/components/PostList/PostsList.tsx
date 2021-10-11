@@ -1,7 +1,8 @@
-import React, { useEffect, useState, SetStateAction } from 'react';
+import React, { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { AxiosResponse } from 'axios';
-import { client } from '../../api';
+import { useDispatch, useSelector } from 'react-redux';
+import { getPostsSelector } from '../../redux/store';
+import { loadPosts } from '../../redux/reducers/postsReducer';
 
 const columns = [
   { field: 'userId', headerName: 'UserID' },
@@ -10,12 +11,12 @@ const columns = [
 ];
 
 export const PostsList: React.FC = () => {
-  const [posts, setPosts] = useState([] as Post[]);
+  const posts: Post[] = useSelector(getPostsSelector);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    client.getPosts()
-      .then((response: AxiosResponse<{}>) => setPosts(response.data as SetStateAction<Post[]>));
-  }, []);
+    dispatch(loadPosts());
+  }, [dispatch]);
 
   return (
     <div style={{ height: 840, width: '100%' }}>

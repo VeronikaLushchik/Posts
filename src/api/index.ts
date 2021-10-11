@@ -14,7 +14,7 @@ const request = (method:Method, url:string) => {
   return (params = {}) => makeRequest(method, url, params);
 };
 
-export const client = {
+export const postApi = {
   removePost: (postId:number) => request('delete', `/posts/${postId}`)(),
   getPosts: request('get', '/posts'),
   addPost: (newPost: Post) => request('post', '/posts')(newPost),

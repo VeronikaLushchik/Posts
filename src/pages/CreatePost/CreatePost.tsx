@@ -1,7 +1,5 @@
-import React, { SetStateAction, useState } from 'react';
+import React from 'react';
 import { Formik } from 'formik';
-import { AxiosResponse } from 'axios';
-import { client } from '../../api';
 import '../../scss/CreatePost.scss';
 
 type Values = {
@@ -9,14 +7,7 @@ type Values = {
   body?: string,
 };
 
-export const CreatePost: React.FC = () => {
-  const [posts, setPosts] = useState([] as Post[]);
-  const addNewPost = (newPost: Partial<Post>) => {
-    client.addPost(newPost as Post)
-      .then(() => client.getPosts())
-      .then((response: AxiosResponse<{}>) => setPosts(response.data as SetStateAction<Post[]>));
-  };
-
+export const CreatePost: React.FC = (props: any) => {
   return (
     <div className="create">
       <h1 className="create__title">Create a post</h1>
@@ -32,7 +23,7 @@ export const CreatePost: React.FC = () => {
           return errors;
         }}
         onSubmit={(values, { setSubmitting }) => {
-          addNewPost(values);
+          props.addNewPost(values);
           setSubmitting(false);
         }}
       >
@@ -74,7 +65,6 @@ export const CreatePost: React.FC = () => {
           </form>
         )}
       </Formik>
-      <h6>{posts.length}</h6>
     </div>
   );
 };
