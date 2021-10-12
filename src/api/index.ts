@@ -17,5 +17,6 @@ const request = (method:Method, url:string) => {
 export const postApi = {
   removePost: (postId:number) => request('delete', `/posts/${postId}`)(),
   getPosts: request('get', '/posts'),
+  getPostComments: (postId:number) => request('get', `/posts/${postId}/comments`)(),
   addPost: (newPost: Post) => request('post', '/posts')(newPost),
 };

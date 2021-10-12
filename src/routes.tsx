@@ -1,5 +1,5 @@
 import React from 'react';
-import { PostsList } from './components/PostList';
+import PostsList from './components/PostList';
 import CreatePost from './pages/CreatePost';
 
 export const routes = [

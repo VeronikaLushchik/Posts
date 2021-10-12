@@ -6,3 +6,8 @@ interface Post {
     body: string;
   }
   
+  interface Comment {
+    name: string;
+    postId: string;
+    body:string;
+  }
