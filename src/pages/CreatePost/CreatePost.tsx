@@ -1,29 +1,30 @@
 import React from 'react';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 import '../../scss/CreatePost.scss';
 
-type Values = {
-  title?: string,
-  body?: string,
+type Props = {
+  addNewPost: (post:Post) => void,
 };
 
-export const CreatePost: React.FC = (props: any) => {
+export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
+  const validate = Yup.object({
+    title: Yup.string()
+      .min(5, 'Must be 5 characters or more')
+      .max(50, 'Must be 50 characters or less')
+      .required('Required'),
+    body: Yup.string()
+      .required('Required'),
+  });
+
   return (
     <div className="create">
       <h1 className="create__title">Create a post</h1>
       <Formik
         initialValues={{ title: '', body: '' }}
-        validate={values => {
-          const errors: Values = {};
-
-          if (!values.title) {
-            errors.title = 'Required';
-          }
-
-          return errors;
-        }}
+        validationSchema={validate}
         onSubmit={(values, { setSubmitting }) => {
-          props.addNewPost(values);
+          addNewPost(values);
           setSubmitting(false);
         }}
       >

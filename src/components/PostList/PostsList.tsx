@@ -1,11 +1,10 @@
 /* eslint-disable */
 import React, { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { useDispatch, useSelector } from 'react-redux';
-import { getCommentsSelector, getPostsSelector, store } from '../../redux/store';
-import { loadPosts } from '../../redux/reducers/postsReducer';
+import { useSelector } from 'react-redux';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
+import { getCommentsSelector, getPostsSelector } from '../../redux/store';
 
 const columns = [
   { field: 'userId', headerName: 'UserID' },
@@ -13,23 +12,27 @@ const columns = [
   { field: 'body', headerName: 'Body', width: 600 },
 ];
 
-export const PostsList: React.FC = (props:any) => {
+type Props = {
+  loadComments: (activePostId:number) => void;
+  loadPosts: () => void;
+};
+
+export const PostsList: React.FC<Props> = ({ loadComments, loadPosts }) => {
   const posts: Post[] = useSelector(getPostsSelector);
   const comments: Comment[] = useSelector(getCommentsSelector);
-  let activePostId: number = 0;
-  const dispatch = useDispatch();
-  
+  let activePostId = 0;
+
   const onRowSelected = (e:any) => {
-    activePostId = e[0]
-    props.loadComments(activePostId)
-  }
+    activePostId = e[0];
+    loadComments(activePostId);
+  };
 
   useEffect(() => {
-    dispatch(loadPosts());
-  }, [dispatch]);
+    loadPosts();
+  }, []);
 
   useEffect(() => {
-    props.loadComments(activePostId)
+    loadComments(activePostId);
   }, [activePostId]);
 
   return (
@@ -54,7 +57,7 @@ export const PostsList: React.FC = (props:any) => {
         rows={posts}
         columns={columns}
         pageSize={14}
-        onSelectionModelChange = {onRowSelected}
+        onSelectionModelChange={onRowSelected}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
 import { PostsList } from './PostsList';
-import { loadComments } from '../../redux/reducers/postsReducer';
+import { loadComments, loadPosts } from '../../redux/actions/postActions';
 
-export default connect(null, { loadComments })(PostsList);
+export default connect(null, { loadComments, loadPosts })(PostsList);
