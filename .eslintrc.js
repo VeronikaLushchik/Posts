@@ -8,6 +8,7 @@ module.exports = {
     'react/prop-types': 0,
     'react/self-closing-comp': 0,
     'react/display-name': 0,
+    "@typescript-eslint/ban-ts-comment": "off",
 
     // JavaScript
     semi: 0,

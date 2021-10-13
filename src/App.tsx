@@ -1,27 +1,20 @@
 import React from 'react';
-import './App.scss';
-
-interface Props {
-  onClick: () => void;
-}
-
-export const Provider: React.FC<Props> = React.memo(
-  ({ onClick, children }) => (
-    <button
-      type="button"
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  ),
-);
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { routes } from './routes';
+import { Layout } from './pages/Layout';
 
 export const App: React.FC = () => {
   return (
-    <div className="starter">
-      <Provider onClick={() => ({})}>
-        <TodoList />
-      </Provider>
-    </div>
+    <Router>
+      <Layout>
+        <Switch>
+          {routes.map(item => (
+            <Route exact path={item.path} key={item.path}>
+              {item.page}
+            </Route>
+          ))}
+        </Switch>
+      </Layout>
+    </Router>
   );
 };
