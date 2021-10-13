@@ -1,6 +1,7 @@
 import React from 'react';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
+import { Form, Formik, ErrorMessage } from 'formik';
+import { Button, TextField } from '@mui/material';
+import { validate } from '../../validate';
 import '../../scss/CreatePost.scss';
 
 type Props = {
@@ -8,15 +9,6 @@ type Props = {
 };
 
 export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
-  const validate = Yup.object({
-    title: Yup.string()
-      .min(5, 'Must be 5 characters or more')
-      .max(50, 'Must be 50 characters or less')
-      .required('Required'),
-    body: Yup.string()
-      .required('Required'),
-  });
-
   return (
     <div className="create">
       <h1 className="create__title">Create a post</h1>
@@ -30,40 +22,39 @@ export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
       >
         {({
           values,
-          errors,
-          touched,
           handleChange,
           handleBlur,
           handleSubmit,
           isSubmitting,
         }) => (
-          <form onSubmit={handleSubmit} className="create__form">
-            <input
-              type="text"
+          <Form onSubmit={handleSubmit} className="create__form">
+            <TextField
+              placeholder="Title"
               name="title"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.title}
               className="create__input"
+              helperText={<ErrorMessage name="title" />}
             />
-            {errors.title && touched.title && errors.title}
-            <input
-              type="text"
+            <TextField
+              placeholder="Text"
               name="body"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.body}
               className="create__input"
+              helperText={<ErrorMessage name="body" />}
             />
-            {errors.body && touched.body && errors.body}
-            <button
+            <Button
               type="submit"
               disabled={isSubmitting}
               className="create__button"
+              variant="contained"
             >
               Submit
-            </button>
-          </form>
+            </Button>
+          </Form>
         )}
       </Formik>
     </div>

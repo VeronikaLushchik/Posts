@@ -1,5 +1,14 @@
 import { connect } from 'react-redux';
 import { PostsList } from './PostsList';
-import { loadComments, loadPosts } from '../../redux/actions/postActions';
+import { loadPosts } from '../../redux/actions/postActions';
+import { loadComments } from '../../redux/actions/commentsActions';
 
-export default connect(null, { loadComments, loadPosts })(PostsList);
+const mapStateToProps = (state:RootState) => {
+  return {
+    posts: state.posts,
+    comments: state.comments,
+    loader: state.loader,
+  };
+};
+
+export default connect(mapStateToProps, { loadComments, loadPosts })(PostsList);

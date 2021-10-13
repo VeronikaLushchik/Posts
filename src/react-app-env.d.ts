@@ -15,8 +15,9 @@ interface Post {
   type RootState = {
     posts: Post[],
     post: Partial<Post> | null;
-    selectedPostId: number,
+    selectedPostId: number | null,
     comments: Comment[],
-    userId: number,
+    userId: number | null,
+    loader: boolean,
   };
   

@@ -1,10 +1,9 @@
 /* eslint-disable */
 import React, { useEffect } from 'react';
 import { DataGrid } from '@mui/x-data-grid';
-import { useSelector } from 'react-redux';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { getCommentsSelector, getPostsSelector } from '../../redux/store';
+import { CircularProgress } from '@mui/material';
 
 const columns = [
   { field: 'userId', headerName: 'UserID' },
@@ -13,13 +12,14 @@ const columns = [
 ];
 
 type Props = {
+  posts: Post[],
+  comments: Comment[],
+  loader: boolean,
   loadComments: (activePostId:number) => void;
   loadPosts: () => void;
 };
 
-export const PostsList: React.FC<Props> = ({ loadComments, loadPosts }) => {
-  const posts: Post[] = useSelector(getPostsSelector);
-  const comments: Comment[] = useSelector(getCommentsSelector);
+export const PostsList: React.FC<Props> = ({ loader, posts, comments, loadComments, loadPosts }) => {
   let activePostId = 0;
 
   const onRowSelected = (e:any) => {
@@ -53,12 +53,12 @@ export const PostsList: React.FC<Props> = ({ loadComments, loadPosts }) => {
         </Typography>
         </>)}
       </CardContent>
-      <DataGrid
+      {!loader ? (<DataGrid
         rows={posts}
         columns={columns}
         pageSize={14}
         onSelectionModelChange={onRowSelected}
-      />
+      />) : (<CircularProgress />)}
     </div>
   );
 };

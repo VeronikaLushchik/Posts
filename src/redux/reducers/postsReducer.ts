@@ -1,12 +1,18 @@
 import { AnyAction } from 'redux';
-import { SET_POSTS, SET_POST, SET_COMMENTS } from '../types';
+import {
+  SET_POSTS,
+  SET_POST,
+  SET_COMMENTS,
+  SET_LOADER,
+} from '../types';
 
 const initialState: RootState = {
   posts: [],
   post: null,
-  selectedPostId: 0,
+  selectedPostId: null,
   comments: [],
-  userId: 0,
+  userId: null,
+  loader: true,
 };
 
 export const postsReducer = (state = initialState, action: AnyAction) => {
@@ -27,6 +33,12 @@ export const postsReducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         comments: action.comments,
+      };
+
+    case SET_LOADER:
+      return {
+        ...state,
+        loader: action.loader,
       };
 
     default:
