@@ -5,22 +5,6 @@ import { SET_POSTS, SET_POST, SET_COMMENTS } from '../types';
 
 import { postApi } from '../../api';
 
-// export type RootState = {
-//   posts: Post[],
-//   post: Partial<Post> | null;
-//   selectedPostId: number,
-//   comments: Comment[],
-//   userId: number,
-// };
-
-// const initialState: RootState = {
-//   posts: [],
-//   post: null,
-//   selectedPostId: 0,
-//   comments: [],
-//   userId: 0,
-// };
-
 export const setPosts = (posts: Post[]) => ({ type: SET_POSTS, posts });
 export const setPost = (post: Post) => ({ type: SET_POST, post });
 export const setComments = (comments: Comment[]) => ({ type: SET_COMMENTS, comments });
