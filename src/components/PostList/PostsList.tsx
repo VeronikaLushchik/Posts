@@ -1,15 +1,15 @@
 /* eslint-disable */
-import React, { useEffect } from 'react';
-import { DataGrid } from '@mui/x-data-grid';
+import React, { useEffect, useState } from 'react';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { CircularProgress } from '@mui/material';
-
-const columns = [
-  { field: 'userId', headerName: 'UserID' },
-  { field: 'title', headerName: 'Title', width: 300 },
-  { field: 'body', headerName: 'Body', width: 600 },
-];
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import Button from '@mui/material/Button';
+import { routes } from '../../routes';
+import { useHistory } from 'react-router';
+import Pagination from '@mui/material/Pagination';
+import { Margin } from '@mui/icons-material';
+import { Stack } from '@mui/material';
 
 type Props = {
   posts: Post[],
@@ -19,46 +19,45 @@ type Props = {
   loadPosts: () => void;
 };
 
-export const PostsList: React.FC<Props> = ({ loader, posts, comments, loadComments, loadPosts }) => {
-  let activePostId = 0;
+export const PostsList: React.FC<Props> = ({ posts, loadPosts }) => {
+  const history = useHistory();
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage] = useState(6);
 
-  const onRowSelected = (e:any) => {
-    activePostId = e[0];
-    loadComments(activePostId);
+  const onRowSelected = (activePostId: number | undefined) => {
+    history.push(routes[2].path + `${activePostId}`)
   };
 
   useEffect(() => {
     loadPosts();
   }, []);
 
-  useEffect(() => {
-    loadComments(activePostId);
-  }, [activePostId]);
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
-    <div style={{ height: 840, width: '100%' }}>
-      <CardContent>
-        {comments.length > 0 && 
-        <Typography variant="h5" component="div">
-          Comments:
-        </Typography>
-        }
-        {comments.map((comment:Comment) => 
-        <>
-        <Typography variant="subtitle1" component="div" key={comment.name}>
-          {comment.name}
-        </Typography>
-        <Typography variant="caption" component="div" key={comment.body}>
-          {comment.body}
-        </Typography>
-        </>)}
-      </CardContent>
-      {!loader ? (<DataGrid
-        rows={posts}
-        columns={columns}
-        pageSize={14}
-        onSelectionModelChange={onRowSelected}
-      />) : (<CircularProgress />)}
+    <>
+    <div style={{ height: '100%', width: '100%', display: 'flex', flexWrap: 'wrap' }}>
+    {currentPosts.map((post:Post) => 
+        <Card sx={{ maxWidth: 370, margin: '10px' }}>
+          <CardContent>
+            <Typography variant="h5" component="div">
+              {post.title}
+            </Typography>
+            <Typography variant="body2">
+              {post.body}
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button onClick={() => onRowSelected(post.id)} size="small">Read More</Button>
+          </CardActions>
+        </Card>
+    )}
+    <Stack spacing={2} justifyContent="center" m="auto">
+      <Pagination size="large" count={Math.ceil(posts.length / postsPerPage)} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />
+    </Stack>
     </div>
+    </>
   );
 };
