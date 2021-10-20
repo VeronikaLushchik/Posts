@@ -2,7 +2,7 @@
 import React from 'react';
 import PostsList from './components/PostList';
 import CreatePost from './pages/CreatePost';
-import { PostPage } from './pages/Post/Post';
+import PostPage from './components/PostPage';
 
 export const routes = [
   {
@@ -16,6 +16,6 @@ export const routes = [
 
   {
     page: <PostPage />,
-    path: '/post',
+    path: "/posts/:postId",
   },
 ];

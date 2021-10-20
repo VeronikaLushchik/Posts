@@ -4,43 +4,90 @@ import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import Button from '@mui/material/Button';
-import { routes } from '../../routes';
-import { useHistory } from 'react-router';
 import Pagination from '@mui/material/Pagination';
-import { Margin } from '@mui/icons-material';
-import { Stack } from '@mui/material';
+import { Box, Button, Stack } from '@mui/material';
+import { Link } from 'react-router-dom'
+import {Header} from '../Header/Header';
+import CreatePost from '../../pages/CreatePost';
 
 type Props = {
   posts: Post[],
-  comments: Comment[],
   loader: boolean,
-  loadComments: (activePostId:number) => void;
   loadPosts: () => void;
+  query: string;
+  setSearchValue: (q: string) => void;
+  select: string;
+  setSelectValue: (s: string) => void;
+  page: string;
+  setSelectPage: (p: string) => void;
+  view: string;
+  setSelectView: (v: string) => void;
 };
 
-export const PostsList: React.FC<Props> = ({ posts, loadPosts }) => {
-  const history = useHistory();
-  const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage] = useState(6);
+function sortPosts(posts: Post[], select:string) {
+  return posts.sort((a: any, b: any) => {
+    switch (select) {
+      case 'ASC':
+        return a.title.localeCompare(b.title)
+      case 'DESC':
+        return b.title.localeCompare(a.title)
+      default:
+        return;
+    }
+  })
+}
 
-  const onRowSelected = (activePostId: number | undefined) => {
-    history.push(routes[2].path + `${activePostId}`)
+let maxWidth: number;
+
+export const PostsList: React.FC<Props> = ({ page, setSelectPage, setSelectValue, select, setSearchValue, query, posts, loadPosts, view, setSelectView }) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [toggler, setToggler] = useState(false);
+
+  const [displayedList, setDisplayedList] = useState<Post[]>([])
+  
+  const indexOfLastPost = currentPage * +page;
+  const indexOfFirstPost = indexOfLastPost - +page;
+
+  const handleChange = () => {
+    setToggler(!toggler);
   };
 
   useEffect(() => {
     loadPosts();
   }, []);
 
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  
+  useEffect(() => {
+    if (view === 'list') {
+      maxWidth = 540;
+    } else {
+      maxWidth = 370;
+    }
+    setDisplayedList(posts.slice(indexOfFirstPost, indexOfLastPost))
+  }, [posts, currentPage, page, view])
+
+  useEffect(() => {
+    if(query.trim()){
+      setDisplayedList(sortPosts(posts.slice(indexOfFirstPost, indexOfLastPost).filter(post => post.title.includes(query)), select))
+    }else {
+      setDisplayedList(sortPosts(posts.slice(indexOfFirstPost, indexOfLastPost), select))
+    }
+  }, [query, select]);
 
   return (
     <>
-    <div style={{ height: '100%', width: '100%', display: 'flex', flexWrap: 'wrap' }}>
-    {currentPosts.map((post:Post) => 
-        <Card sx={{ maxWidth: 370, margin: '10px' }}>
+    <div style={{ height: '100%', width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    <Box sx={{ '& button': { m: 1 } }}>
+    <Header setSearchValue={setSearchValue} query={query} select={select} setSelectValue={setSelectValue} setSelectPage={setSelectPage} page={page} setSelectView={setSelectView} view={view} />
+    <Button variant="outlined" size="large" onClick={handleChange}>
+        Create a post
+    </Button>
+    {toggler && 
+      <CreatePost />
+    }
+    </Box>
+    {displayedList.map((post:Post) => 
+        <Card key={post.id} sx={{ maxWidth: {maxWidth}, margin: '10px' }} className="cards">
           <CardContent>
             <Typography variant="h5" component="div">
               {post.title}
@@ -50,12 +97,15 @@ export const PostsList: React.FC<Props> = ({ posts, loadPosts }) => {
             </Typography>
           </CardContent>
           <CardActions>
-            <Button onClick={() => onRowSelected(post.id)} size="small">Read More</Button>
+            <Link to={`/posts/${post.id}`} >
+            Read more
+            </Link>
           </CardActions>
         </Card>
     )}
-    <Stack spacing={2} justifyContent="center" m="auto">
-      <Pagination size="large" count={Math.ceil(posts.length / postsPerPage)} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />
+    <Stack spacing={2} m="auto" className="pagination">
+      {!query ? <Pagination size="large" count={Math.ceil(posts.length / +page)} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />
+      : <Pagination size="large" count={Math.ceil(displayedList.length / +page)} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />}
     </Stack>
     </div>
     </>

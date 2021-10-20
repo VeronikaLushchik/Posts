@@ -1,24 +1,21 @@
-/* eslint-disable */
 import React from 'react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { Button, TextField } from '@mui/material';
-import { validatePost } from '../../validate';
-import '../../scss/CreatePost.scss';
+import { validateComment } from '../validate';
 
 type Props = {
-  addNewPost: (post:Post) => void,
+  addNewComment: (comment:Partial<Comment>) => void,
 };
 
-export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
+export const CommentForm: React.FC<Props> = ({ addNewComment }) => {
   return (
     <div className="create">
-      <h1 className="create__title">Create a post</h1>
+      <h1 className="create__title">Add a comment</h1>
       <Formik
-        initialValues={{ title: '', body: '' }}
-        validationSchema={validatePost}
+        initialValues={{ name: '', body: '', email: '' }}
+        validationSchema={validateComment}
         onSubmit={(values, { setSubmitting, resetForm }) => {
-          addNewPost(values);
-          console.log('1')
+          addNewComment(values);
           setSubmitting(false);
           resetForm();
         }}
@@ -32,13 +29,22 @@ export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
         }) => (
           <Form onSubmit={handleSubmit} className="create__form">
             <TextField
-              placeholder="Title"
-              name="title"
+              placeholder="Name"
+              name="name"
               onChange={handleChange}
               onBlur={handleBlur}
-              value={values.title}
+              value={values.name}
               className="create__input"
-              helperText={<ErrorMessage name="title" />}
+              helperText={<ErrorMessage name="name" />}
+            />
+            <TextField
+              placeholder="Email"
+              name="email"
+              onChange={handleChange}
+              onBlur={handleBlur}
+              value={values.email}
+              className="create__input"
+              helperText={<ErrorMessage name="email" />}
             />
             <TextField
               placeholder="Text"

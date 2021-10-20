@@ -8,16 +8,21 @@ interface Post {
   
   interface Comment {
     name: string;
-    postId: string;
+    postId?: string;
+    email: string;
     body:string;
   }
 
   type RootState = {
     posts: Post[],
     post: Partial<Post> | null;
-    selectedPostId: number | null,
     comments: Comment[],
+    comment: Partial<Comment> | null,
     userId: number | null,
     loader: boolean,
+    query: string,
+    select: string,
+    page: string,
+    view: string,
   };
   
