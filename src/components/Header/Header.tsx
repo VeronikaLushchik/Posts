@@ -16,13 +16,13 @@ import '../../scss/header.scss';
 
 type Props = {
   query: string;
-  setSearchValue: (q: string) => void;
+  setSearchValue: (query: string) => void;
   select: string;
-  setSelectValue: (s: string) => void;
+  setSelectValue: (select: string) => void;
   page: string;
-  setSelectPage: (s: string) => void;
+  setSelectPage: (page: string) => void;
   view: string;
-  setSelectView: (v: string) => void;
+  setSelectView: (view: string) => void;
 };
 
 export const Header:React.FC<Props> = ({
