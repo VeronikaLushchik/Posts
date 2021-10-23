@@ -4,12 +4,16 @@ import {
   SET_POSTS,
   SET_POST,
   SET_COMMENTS,
-  SET_COMMENT,
-  SET_LOADER,
   SET_SEARCH_VALUE,
   SET_SELECT_VALUE,
   SET_SELECT_PAGE,
   SET_SELECT_VIEW,
+  SET_ADD_FAVORITE,
+  ADD_POST,
+  FETCH_POSTS,
+  ERROR_POSTS,
+  ERROR_POST,
+  ADD_COMMENT
 } from '../types';
 
 const initialState: RootState = {
@@ -18,11 +22,14 @@ const initialState: RootState = {
   comments: [],
   comment: null,
   userId: null,
-  loader: true,
   query: '',
   select: '',
   page: '6',
-  view: 'module'
+  view: 'module',
+  favorite: [],
+  allPosts:[],
+  isFetching: false,
+  isFetchingPost: false,
 };
 
 export const postsReducer = (state = initialState, action: AnyAction) => {
@@ -31,12 +38,14 @@ export const postsReducer = (state = initialState, action: AnyAction) => {
       return {
         ...state,
         posts: action.posts,
+        isFetching: false,
       };
 
     case SET_POST:
       return {
         ...state,
         post: action.post,
+        isFetchingPost: false,
       };
 
     case SET_COMMENTS:
@@ -45,17 +54,12 @@ export const postsReducer = (state = initialState, action: AnyAction) => {
         comments: action.comments,
       };
 
-    case SET_COMMENT:
-      return {
-        ...state,
-        comment: action.comment,
-      };
-
-    case SET_LOADER:
-      return {
-        ...state,
-        loader: action.loader,
-      };
+      case ADD_COMMENT: {
+        return {
+            ...state,
+            comments: [action.comment, ...state.comments],
+        };
+      }
 
     case SET_SEARCH_VALUE: {
       return {
@@ -83,6 +87,40 @@ export const postsReducer = (state = initialState, action: AnyAction) => {
           ...state,
           view: action.view,
       };
+    }
+
+    case SET_ADD_FAVORITE: {
+      return {
+          ...state,
+          favorite: action.favorite,
+      };
+    }
+
+    case ADD_POST: {
+      return {
+          ...state,
+          posts: [action.post, ...state.posts],
+      };
+    }
+    case FETCH_POSTS:{
+      return {
+          ...state,
+          isFetching: true,
+        };
+    }
+
+    case ERROR_POSTS: {
+      return {
+          ...state,
+          isFetching: false
+        }
+    }
+
+    case ERROR_POST: {
+      return {
+          ...state,
+          isFetching: false
+        }
     }
 
     default:

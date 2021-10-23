@@ -1,29 +1,16 @@
 .create {
-  margin: 20px;
-
-  &__title {
-    text-align: center;
-  }
+  display: flex;
+  justify-content: center;
+  padding-bottom: 20px;
 
   &__form {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    gap: 10px;
   }
 
   &__input {
     width: 100%;
-  }
-
-  &__button {
-    height: 40px;
-    width: 200px;
-    background-color: #008080;
-    border: 1px solid #99a893;
-    border-radius: 4px;
-    color: #fff;
-    font-size: 24px;
   }
 }

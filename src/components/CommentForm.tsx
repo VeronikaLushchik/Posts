@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { Button, TextField } from '@mui/material';
 import { validateComment } from '../validate';
+import '../scss/createcomment.scss';
 
 type Props = {
   addNewComment: (comment:Partial<Comment>) => void,
@@ -9,8 +10,8 @@ type Props = {
 
 export const CommentForm: React.FC<Props> = ({ addNewComment }) => {
   return (
-    <div className="create">
-      <h1 className="create__title">Add a comment</h1>
+    <div className="create_comment">
+      <h1 className="create_comment__title">Add a comment</h1>
       <Formik
         initialValues={{ name: '', body: '', email: '' }}
         validationSchema={validateComment}
@@ -27,14 +28,14 @@ export const CommentForm: React.FC<Props> = ({ addNewComment }) => {
           handleSubmit,
           isSubmitting,
         }) => (
-          <Form onSubmit={handleSubmit} className="create__form">
+          <Form onSubmit={handleSubmit} className="create_comment__form">
             <TextField
               placeholder="Name"
               name="name"
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.name}
-              className="create__input"
+              className="create_comment__input"
               helperText={<ErrorMessage name="name" />}
             />
             <TextField
@@ -43,7 +44,7 @@ export const CommentForm: React.FC<Props> = ({ addNewComment }) => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.email}
-              className="create__input"
+              className="create_comment__input"
               helperText={<ErrorMessage name="email" />}
             />
             <TextField
@@ -52,13 +53,13 @@ export const CommentForm: React.FC<Props> = ({ addNewComment }) => {
               onChange={handleChange}
               onBlur={handleBlur}
               value={values.body}
-              className="create__input"
+              className="create_comment__input"
               helperText={<ErrorMessage name="body" />}
             />
             <Button
               type="submit"
               disabled={isSubmitting}
-              className="create__button"
+              className="create_comment__button"
               variant="contained"
             >
               Submit

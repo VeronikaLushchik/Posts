@@ -23,32 +23,58 @@ type Props = {
   setSelectPage: (s: string) => void;
   view: string;
   setSelectView: (v: string) => void;
-}
+};
 
-export const Header:React.FC<Props> = ({ query, setSearchValue, select, setSelectValue, page, setSelectPage, setSelectView, view}) => {
+export const Header:React.FC<Props> = ({
+  query,
+  setSearchValue,
+  select,
+  setSelectValue,
+  page,
+  setSelectPage,
+  setSelectView,
+  view,
+}) => {
+
+  const handleChange = (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setSearchValue(
+      event.target.value
+    )};
+
+  const handleSelect = (event: SelectChangeEvent<string>) => {
+    setSelectValue(
+      event.target.value
+    )};
+
+  const handleSelectPage = (event: SelectChangeEvent<string>) => {
+    setSelectPage(
+      event.target.value
+    )};
+
+  const handleChangeToggler = (event: React.MouseEvent<HTMLElement, MouseEvent>, value:any) => {
+    setSelectView(
+      value
+    )};
 
   return (
     <>
       <div className="header">
-      <Paper
-        component="form"
-        sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-      >
-        <InputBase
-          sx={{ ml: 1, flex: 1 }}
-          placeholder="Search..."
-          inputProps={{ 'aria-label': 'search' }} 
-          value={query}
-          onChange={(event) => {
-            setSearchValue(
-              event.target.value
-            )}}
-        />
-        <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
-          <SearchIcon />
-        </IconButton>
+        <Paper
+          component="form"
+          sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search..."
+            inputProps={{ 'aria-label': 'search' }}
+            value={query}
+            onChange={(event)=>handleChange(event)}
+          />
+          <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
         </Paper>
-
+        <div className="header__buttons">
         <Box sx={{ minWidth: 120 }}>
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">Alphabet</InputLabel>
@@ -57,10 +83,7 @@ export const Header:React.FC<Props> = ({ query, setSearchValue, select, setSelec
               id="demo-simple-select"
               value={select}
               label="Alphabet"
-              onChange={(event) => {
-                setSelectValue(
-                  event.target.value
-                )}}
+              onChange={(event) => handleSelect(event)}
             >
               <MenuItem value={'ASC'}>ASC</MenuItem>
               <MenuItem value={'DESC'}>DESC</MenuItem>
@@ -76,10 +99,7 @@ export const Header:React.FC<Props> = ({ query, setSearchValue, select, setSelec
               id="demo-simple-select"
               value={page}
               label="pagePosts"
-              onChange={(event) => {
-                setSelectPage(
-                  event.target.value
-                )}}
+              onChange={(event) => handleSelectPage(event)}
             >
               <MenuItem value={'6'}>6</MenuItem>
               <MenuItem value={'12'}>12</MenuItem>
@@ -92,10 +112,7 @@ export const Header:React.FC<Props> = ({ query, setSearchValue, select, setSelec
           orientation="horizontal"
           value={view}
           exclusive
-          onChange={(event, value) => {
-            setSelectView(
-              value
-            )}}
+          onChange={(event, value) => handleChangeToggler(event, value)}
         >
           <ToggleButton value="module" aria-label="module">
             <ViewModuleIcon />
@@ -104,6 +121,7 @@ export const Header:React.FC<Props> = ({ query, setSearchValue, select, setSelec
             <ViewListIcon />
           </ToggleButton>
         </ToggleButtonGroup>
+        </div>
       </div>
     </>
   );

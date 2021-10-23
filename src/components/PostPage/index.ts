@@ -6,7 +6,7 @@ import { loadComments } from '../../redux/actions/commentsActions';
 import { addNewComment } from '../../redux/actions/commentsActions';
 import PostPage from './PostPage';
 
-const mapStateToProps = (state:any) => ({post: state.post, comments: state.comments })
+const mapStateToProps = (state:any) => ({post: state.post, comments: state.comments, comment: state.comment})
   
   
   export default withRouter(connect(mapStateToProps, { loadComments, loadPost, addNewComment })(PostPage))

@@ -1,1 +1,1 @@
-- [DEMO LINK](https://VeronikaLushchik.github.io/pet/)
+- [DEMO LINK](https://VeronikaLushchik.github.io/Posts/)

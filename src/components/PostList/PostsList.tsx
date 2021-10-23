@@ -5,57 +5,92 @@ import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import Pagination from '@mui/material/Pagination';
-import { Box, Button, Stack } from '@mui/material';
-import { Link } from 'react-router-dom'
-import {Header} from '../Header/Header';
+import { Box, CircularProgress, Stack } from '@mui/material';
+import { Link } from 'react-router-dom';
+import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
+import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
+import { Header } from '../Header/Header';
 import CreatePost from '../../pages/CreatePost';
+import FavoriteList from '../FavoriteList/FavoriteList';
+import '../../scss/postlist.scss';
+import { storage } from '../../utils'
 
 type Props = {
   posts: Post[],
-  loader: boolean,
   loadPosts: () => void;
   query: string;
-  setSearchValue: (q: string) => void;
+  setSearchValue: (query: string) => void;
   select: string;
-  setSelectValue: (s: string) => void;
+  setSelectValue: (select: string) => void;
   page: string;
-  setSelectPage: (p: string) => void;
+  setSelectPage: (page: string) => void;
   view: string;
-  setSelectView: (v: string) => void;
+  setSelectView: (view: string) => void;
+  favorite: number[];
+  setFavoriteList: (favorite: number[]) => void;
+  isFetching: boolean;
 };
 
 function sortPosts(posts: Post[], select:string) {
   return posts.sort((a: any, b: any) => {
     switch (select) {
       case 'ASC':
-        return a.title.localeCompare(b.title)
+        return a.title.localeCompare(b.title);
       case 'DESC':
-        return b.title.localeCompare(a.title)
+        return b.title.localeCompare(a.title);
       default:
-        return;
+        return posts;
     }
-  })
+  });
 }
 
 let maxWidth: number;
 
-export const PostsList: React.FC<Props> = ({ page, setSelectPage, setSelectValue, select, setSearchValue, query, posts, loadPosts, view, setSelectView }) => {
+export const PostsList: React.FC<Props> = ({
+  favorite,
+  setFavoriteList,
+  page,
+  setSelectPage,
+  setSelectValue,
+  select,
+  setSearchValue,
+  query,
+  posts,
+  loadPosts,
+  view,
+  setSelectView,
+  isFetching,
+}) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const [toggler, setToggler] = useState(false);
+  const [displayedList, setDisplayedList] = useState<Post[]>([]);
 
-  const [displayedList, setDisplayedList] = useState<Post[]>([])
-  
   const indexOfLastPost = currentPage * +page;
   const indexOfFirstPost = indexOfLastPost - +page;
+  const count = Math.ceil(displayedList.length / +page);
 
-  const handleChange = () => {
-    setToggler(!toggler);
+  const handleFavorite = (id: number) => {
+    let newFavList = [...favorite];
+
+    if (newFavList.includes(id)) {
+      newFavList = newFavList.filter(current => current !== id);
+    } else {
+      newFavList.push(id);
+    }
+    storage.set('key', newFavList);
+
+    setFavoriteList(newFavList);
   };
 
   useEffect(() => {
     loadPosts();
   }, []);
 
+  useEffect(() => {
+    let favoriteItems = storage.get('key')
+    if (favoriteItems?.length) {
+      setFavoriteList(favoriteItems);
+    };
+  }, []);
   
   useEffect(() => {
     if (view === 'list') {
@@ -76,19 +111,20 @@ export const PostsList: React.FC<Props> = ({ page, setSelectPage, setSelectValue
 
   return (
     <>
-    <div style={{ height: '100%', width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
-    <Box sx={{ '& button': { m: 1 } }}>
+    <FavoriteList favorite={favorite} posts={posts} setFavoriteList={setFavoriteList} />
+    <Box className="header">
     <Header setSearchValue={setSearchValue} query={query} select={select} setSelectValue={setSelectValue} setSelectPage={setSelectPage} page={page} setSelectView={setSelectView} view={view} />
-    <Button variant="outlined" size="large" onClick={handleChange}>
-        Create a post
-    </Button>
-    {toggler && 
-      <CreatePost />
-    }
     </Box>
+    <CreatePost />
+    {isFetching ? <CircularProgress /> :
+    <>
+    <div style={{ height: '100%', width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
     {displayedList.map((post:Post) => 
         <Card key={post.id} sx={{ maxWidth: {maxWidth}, margin: '10px' }} className="cards">
-          <CardContent>
+          <CardContent className="cardcontent">
+            {favorite.includes(post.id as number) ? <FavoriteOutlinedIcon onClick={() => handleFavorite(post.id as number)} className="like"/> :
+              <FavoriteBorderOutlinedIcon onClick={() => handleFavorite(post.id as number)} className="like"/>
+            }
             <Typography variant="h5" component="div">
               {post.title}
             </Typography>
@@ -96,18 +132,20 @@ export const PostsList: React.FC<Props> = ({ page, setSelectPage, setSelectValue
               {post.body}
             </Typography>
           </CardContent>
-          <CardActions>
-            <Link to={`/posts/${post.id}`} >
+          <CardActions >
+            <Link to={`/posts/${post.id}`} className="link">
             Read more
             </Link>
           </CardActions>
         </Card>
     )}
+      </div>
     <Stack spacing={2} m="auto" className="pagination">
       {!query ? <Pagination size="large" count={Math.ceil(posts.length / +page)} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />
-      : <Pagination size="large" count={Math.ceil(displayedList.length / +page)} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />}
+      : <Pagination size="large" count={count} page={currentPage} onChange={(event,val)=> setCurrentPage(val)} />}
     </Stack>
-    </div>
+    </>
+    }
     </>
   );
 };

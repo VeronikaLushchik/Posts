@@ -2,11 +2,16 @@
     padding-bottom: 30px;
     display: flex;
     width: 100%;
-    justify-content: space-between;
     gap: 40px;
 
-    @media (min-width: 960px) {
+    &__buttons {
+        display: flex;
+        justify-content: flex-end;
         gap: 10px;
-        width: 960px;
+    }
+
+    @media (max-width: 480px) {
+        width: 480px;
+        gap: 10px;
     }
 }

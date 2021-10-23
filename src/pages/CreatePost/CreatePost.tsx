@@ -1,27 +1,41 @@
 /* eslint-disable */
 import React from 'react';
-import { Form, Formik, ErrorMessage } from 'formik';
-import { Button, TextField } from '@mui/material';
+import { Formik, ErrorMessage } from 'formik';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField } from '@mui/material';
 import { validatePost } from '../../validate';
 import '../../scss/CreatePost.scss';
 
 type Props = {
-  addNewPost: (post:Post) => void,
+  addNewPost: (post:Post) => void;
 };
 
 export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = (values: Post, { resetForm, setSubmitting }:any) => {
+    addNewPost(values);
+    setSubmitting(false);
+    resetForm();
+    handleClose();
+  };
+
   return (
     <div className="create">
-      <h1 className="create__title">Create a post</h1>
+      <Button variant="outlined" size="large" onClick={handleOpen}>
+        Create a post
+      </Button>
       <Formik
-        initialValues={{ title: '', body: '' }}
+        initialValues={{ title: '', body: ''}}
         validationSchema={validatePost}
-        onSubmit={(values, { setSubmitting, resetForm }) => {
-          addNewPost(values);
-          console.log('1')
-          setSubmitting(false);
-          resetForm();
-        }}
+        onSubmit={handleSubmit}
       >
         {({
           values,
@@ -30,36 +44,43 @@ export const CreatePost: React.FC<Props> = ({ addNewPost }) => {
           handleSubmit,
           isSubmitting,
         }) => (
-          <Form onSubmit={handleSubmit} className="create__form">
-            <TextField
-              placeholder="Title"
-              name="title"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.title}
-              className="create__input"
-              helperText={<ErrorMessage name="title" />}
-            />
-            <TextField
-              placeholder="Text"
-              name="body"
-              onChange={handleChange}
-              onBlur={handleBlur}
-              value={values.body}
-              className="create__input"
-              helperText={<ErrorMessage name="body" />}
-            />
-            <Button
-              type="submit"
-              disabled={isSubmitting}
-              className="create__button"
-              variant="contained"
-            >
-              Submit
-            </Button>
-          </Form>
+          <Dialog open={open}>
+            <DialogTitle>Create</DialogTitle>
+            <DialogContent>
+              <TextField
+                placeholder="Title"
+                name="title"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.title}
+                className="create__input"
+                helperText={<ErrorMessage name="title" />}
+              />
+              <TextField
+                placeholder="Text"
+                name="body"
+                onChange={handleChange}
+                onBlur={handleBlur}
+                value={values.body}
+                className="create__input"
+                helperText={<ErrorMessage name="body" />}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button
+                type="submit"
+                disabled={isSubmitting}
+                className="create__button"
+                variant="contained"
+                onClick={() => handleSubmit()}
+              >
+                Submit
+              </Button>
+              <Button onClick={handleClose}>Cancel</Button>
+            </DialogActions>
+          </Dialog>
         )}
-      </Formik>
+      </Formik> 
     </div>
   );
 };
