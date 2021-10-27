@@ -1,26 +1,39 @@
+/* eslint-disable */
 import { makeStyles } from '@mui/styles';
 import React from 'react';
 import {
-  Drawer, Typography, List, ListItem, ListItemIcon, ListItemText,
+  List, ListItem, ListItemText, 
 } from '@mui/material';
-import { AddCircleOutlineOutlined, SubjectOutlined } from '@mui/icons-material';
 import { useHistory } from 'react-router';
-
-const drawerWidth = 240;
 
 const useStyles = makeStyles({
   page: {
-    background: '#f9f9f9',
-    width: '100%',
+    maxWidth: '1200px',
+    height: '100%',
+    padding: '70px',
+    fontSize: '16px',
+    fontWight: '400',
+    lineHeight: '1.5',
   },
+
   drawer: {
-    width: drawerWidth,
+    width: '100%',
+    display: 'flex',
+    height: '50px',
+    background: '#f4f4f4',
+    textTransform: 'uppercase',
   },
-  drawerPaper: {
-    width: drawerWidth,
+
+  item: {
+    justifyContent: 'start',
+    maxWidth: '150px',
   },
+
   root: {
     display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+
   },
   active: {
     background: '#f4f4f4',
@@ -38,45 +51,28 @@ export const Layout: React.FC<Props> = ({ children }) => {
   const menuItems = [
     {
       text: 'Posts',
-      icon: <SubjectOutlined color="secondary" />,
       path: '/',
     },
     {
-      text: 'Create Post',
-      icon: <AddCircleOutlineOutlined color="secondary" />,
+      text: 'Add new post',
       path: '/create',
     },
   ];
 
   return (
     <div className={classes.root}>
-
-      <Drawer
-        className={classes.drawer}
-        variant="permanent"
-        anchor="left"
-        classes={{ paper: classes.drawerPaper }}
-      >
-        <div>
-          <Typography variant="h5">
-            Menu
-          </Typography>
-        </div>
-
-        <List>
-          {menuItems.map(item => (
-            <ListItem
-              button
-              key={item.text}
-              onClick={() => history.push(item.path)}
-            >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </ListItem>
-          ))}
-        </List>
-      </Drawer>
-
+      <List className={classes.drawer}>
+        {menuItems.map(item => (
+          <ListItem
+            className={classes.item}
+            button
+            key={item.text}
+            onClick={() => history.push(item.path)}
+          >
+            <ListItemText primary={item.text} />
+          </ListItem>
+        ))}
+      </List>
       <div className={classes.page}>
         {children}
       </div>
