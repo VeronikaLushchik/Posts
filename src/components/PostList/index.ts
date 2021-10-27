@@ -5,17 +5,8 @@ import {
   loadPosts, setSearchValue, setSelectValue, setSelectPage, setSelectView, setFavoriteList,
 } from '../../redux/actions/postActions';
 
-const mapStateToProps = (state:RootState) => {
-  return {
-    posts: state.posts,
-    query: state.query,
-    select: state.select,
-    page: state.page,
-    view: state.view,
-    favorite: state.favorite,
-    isFetching: state.isFetching,
-  };
-};
+const mapStateToProps = ({ query, select, page, view, favorite, isFetching, post, posts }: RootState) =>
+  ({ query, select, page, view, favorite, isFetching, post, posts, })
 
 export default connect(mapStateToProps, {
   loadPosts, setSearchValue, setSelectValue, setSelectPage, setSelectView, setFavoriteList,

@@ -21,13 +21,11 @@ const initialState: RootState = {
   post: null,
   comments: [],
   comment: null,
-  userId: null,
   query: '',
   select: '',
   page: '6',
   view: 'module',
   favorite: [],
-  allPosts:[],
   isFetching: false,
   isFetchingPost: false,
 };

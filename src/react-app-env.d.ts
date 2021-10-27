@@ -18,13 +18,11 @@ interface Post {
     post: Partial<Post> | null;
     comments: Comment[],
     comment: Partial<Comment> | null,
-    userId: number | null,
     query: string,
     select: string,
     page: string,
     view: string,
     favorite: number[],
-    allPosts: Post[],
     isFetching: boolean,
     isFetchingPost: boolean,
   };

@@ -2,7 +2,7 @@ import React from 'react';
 import { Form, Formik, ErrorMessage } from 'formik';
 import { Button, TextField } from '@mui/material';
 import { validateComment } from '../validate';
-import '../scss/createcomment.scss';
+import '../scss/createComment.scss';
 
 type Props = {
   addNewComment: (comment:Partial<Comment>) => void,

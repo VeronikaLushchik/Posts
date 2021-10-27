@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Card from '@mui/material/Card';
@@ -12,7 +12,7 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import { Header } from '../Header/Header';
 import CreatePost from '../../pages/CreatePost';
 import FavoriteList from '../FavoriteList/FavoriteList';
-import '../../scss/postlist.scss';
+import '../../scss/postsList.scss';
 import { storage } from '../../utils'
 
 type Props = {
@@ -91,7 +91,7 @@ export const PostsList: React.FC<Props> = ({
       setFavoriteList(favoriteItems);
     };
   }, []);
-  
+
   useEffect(() => {
     if (view === 'list') {
       maxWidth = 540;
@@ -101,6 +101,7 @@ export const PostsList: React.FC<Props> = ({
     setDisplayedList(posts.slice(indexOfFirstPost, indexOfLastPost))
   }, [posts, currentPage, page, view])
 
+  
   useEffect(() => {
     if(query.trim()){
       setDisplayedList(sortPosts(posts.slice(indexOfFirstPost, indexOfLastPost).filter(post => post.title.includes(query)), select))
@@ -108,6 +109,8 @@ export const PostsList: React.FC<Props> = ({
       setDisplayedList(sortPosts(posts.slice(indexOfFirstPost, indexOfLastPost), select))
     }
   }, [query, select]);
+
+  const isFavoriteItem = (id?: number) => favorite.some(i => i === id);
 
   return (
     <>
@@ -120,11 +123,10 @@ export const PostsList: React.FC<Props> = ({
     <>
     <div style={{ height: '100%', width: '100%', display: 'flex', flexWrap: 'wrap', justifyContent: 'center' }}>
     {displayedList.map((post:Post) => 
-        <Card key={post.id} sx={{ maxWidth: {maxWidth}, margin: '10px' }} className="cards">
+        <Card key={post.id} sx={{ width: { maxWidth }, margin: '10px' }} className="cards">
           <CardContent className="cardcontent">
-            {favorite.includes(post.id as number) ? <FavoriteOutlinedIcon onClick={() => handleFavorite(post.id as number)} className="like"/> :
-              <FavoriteBorderOutlinedIcon onClick={() => handleFavorite(post.id as number)} className="like"/>
-            }
+            { isFavoriteItem(post.id) && <FavoriteOutlinedIcon onClick={() => handleFavorite(post.id as number)} className="like"/> }
+            { !isFavoriteItem(post.id) && <FavoriteBorderOutlinedIcon onClick={() => handleFavorite(post.id as number)} className="like"/> }
             <Typography variant="h5" component="div">
               {post.title}
             </Typography>

@@ -13,6 +13,7 @@ import InputBase from '@mui/material/InputBase';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import '../../scss/header.scss';
+import { useCallback } from 'react';
 
 type Props = {
   query: string;
@@ -36,25 +37,26 @@ export const Header:React.FC<Props> = ({
   view,
 }) => {
 
-  const handleChange = (event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = useCallback((event:React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setSearchValue(
       event.target.value
-    )};
+    )
+  }, []);
 
-  const handleSelect = (event: SelectChangeEvent<string>) => {
+  const handleSelect = useCallback((event: SelectChangeEvent<string>) => {
     setSelectValue(
       event.target.value
-    )};
+    )}, []);
 
-  const handleSelectPage = (event: SelectChangeEvent<string>) => {
+  const handleSelectPage = useCallback((event: SelectChangeEvent<string>) => {
     setSelectPage(
       event.target.value
-    )};
+    )}, []);
 
-  const handleChangeToggler = (event: React.MouseEvent<HTMLElement, MouseEvent>, value:any) => {
+  const handleChangeToggler = useCallback((event: React.MouseEvent<HTMLElement, MouseEvent>, value:any) => {
     setSelectView(
       value
-    )};
+    )}, []);
 
   return (
     <>
@@ -68,7 +70,7 @@ export const Header:React.FC<Props> = ({
             placeholder="Search..."
             inputProps={{ 'aria-label': 'search' }}
             value={query}
-            onChange={(event)=>handleChange(event)}
+            onChange={handleChange}
           />
           <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
             <SearchIcon />
@@ -83,7 +85,7 @@ export const Header:React.FC<Props> = ({
               id="demo-simple-select"
               value={select}
               label="Alphabet"
-              onChange={(event) => handleSelect(event)}
+              onChange={handleSelect}
             >
               <MenuItem value={'ASC'}>ASC</MenuItem>
               <MenuItem value={'DESC'}>DESC</MenuItem>
@@ -99,7 +101,7 @@ export const Header:React.FC<Props> = ({
               id="demo-simple-select"
               value={page}
               label="pagePosts"
-              onChange={(event) => handleSelectPage(event)}
+              onChange={handleSelectPage}
             >
               <MenuItem value={'6'}>6</MenuItem>
               <MenuItem value={'12'}>12</MenuItem>
@@ -112,7 +114,7 @@ export const Header:React.FC<Props> = ({
           orientation="horizontal"
           value={view}
           exclusive
-          onChange={(event, value) => handleChangeToggler(event, value)}
+          onChange={handleChangeToggler}
         >
           <ToggleButton value="module" aria-label="module">
             <ViewModuleIcon />
